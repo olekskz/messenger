@@ -1,0 +1,107 @@
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('../../public/fonts/static/Comfortaa-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('../../public/fonts/static/Comfortaa-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('../../public/fonts/static/Comfortaa-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Global styles */
+body {
+    font-family: 'Comfortaa', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #F0EAD2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Login form */
+.register-form {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    padding: 40px 20px 20px; 
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.register-form img {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: -30px; 
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    background-color: #fff;
+    object-fit: cover;
+    padding: 5px; 
+}
+
+.register-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Comfortaa', sans-serif;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.register-form input:focus {
+    border-color: #A98467;
+}
+
+.register-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #A98467;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Comfortaa', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.register-form button:hover {
+    background-color: #8B7355;
+}
+
+.register-form a {
+    text-align: center;
+    margin-top: 20px;
+    color: #7c614d;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: 'Comfortaa', sans-serif;
+}
