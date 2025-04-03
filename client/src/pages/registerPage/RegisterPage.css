@@ -1,40 +1,12 @@
-@font-face {
-    font-family: 'Comfortaa';
-    src: url('../../public/fonts/static/Comfortaa-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Comfortaa';
-    src: url('../../public/fonts/static/Comfortaa-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Comfortaa';
-    src: url('../../public/fonts/static/Comfortaa-Light.ttf') format('truetype');
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* Global styles */
-body {
-    font-family: 'Comfortaa', sans-serif;
-    margin: 0;
-    padding: 0;
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
     background-color: #F0EAD2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 20px;
 }
 
-/* Login form */
 .register-form {
     width: 100%;
     max-width: 400px;
@@ -46,6 +18,7 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
+    margin: 30px 0;
 }
 
 .register-form img {

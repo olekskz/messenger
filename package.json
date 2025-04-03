@@ -4,13 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": ""
+    "dev": "nodemon server.js"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "io": "^1.5.3",
+    "jsonwebtoken": "^9.0.2",
+    "passport": "^0.7.0",
+    "pg": "^8.14.1",
+    "sequelize": "^6.37.7",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
+    "@types/node": "^22.13.17",
     "concurrently": "^8.2.2",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
   }
 }
