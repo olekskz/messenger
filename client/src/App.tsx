@@ -4,7 +4,9 @@ import MainPage from './pages/mainPage';
 import './styles/global.css';
 import LoginPage from './pages/loginPage/LoginPage';
 import RegisterPage from './pages/registerPage/RegisterPage';
+
 import SecureRoute from './hooks/authController';
+
 
 function App() {
   return (

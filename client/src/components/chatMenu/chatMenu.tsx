@@ -1,19 +1,9 @@
-import React, { useState } from "react";
-import { useView } from "../../hooks/chatMenuContext";
-import AddChatModal from "../AddChatModal/AddChatModal";
+import React, {useState} from "react";
 import "./chatMenu.css";
+import { useView } from "../../chatMenuContext";
 
 const ChatMenu = () => {
     const { currentView, setCurrentView } = useView();
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-    const handleAddChatClick = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
 
     const handleBackClick = () => {
         setCurrentView('chats');
