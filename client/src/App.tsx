@@ -4,14 +4,16 @@ import MainPage from './pages/mainPage';
 import './styles/global.css';
 import LoginPage from './pages/loginPage/LoginPage';
 import RegisterPage from './pages/registerPage/RegisterPage';
-
+import SecureRoute from './hooks/authController';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes> 
-        <Route path="/" element={<MainPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/main" element={<SecureRoute>
+          <MainPage />
+        </SecureRoute>} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </BrowserRouter>

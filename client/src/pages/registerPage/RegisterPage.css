@@ -78,3 +78,8 @@
     font-size: 14px;
     font-family: 'Comfortaa', sans-serif;
 }
+
+.password-mismatch {
+    border: 2px solid #ff4444 !important;
+    background-color: #fff0f0;
+}
