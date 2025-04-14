@@ -7,6 +7,7 @@ import getUserIdFromToken from '../../utils/getUserIdFromToken';
 import socket from "../../socket";
 import { useSelector, useDispatch } from 'react-redux';
 import { setChats, addChat } from '../../features/chatSlice';
+import {setUserProfile} from "../../features/userSlice";
 
 interface Chat {
     id: number;
@@ -14,12 +15,19 @@ interface Chat {
     user_two: number;
     userOne: {
         username: string;
-        avatar: string | null;
+        avatar: string;
     };
     userTwo: {
         username: string;
-        avatar: string | null;
+        avatar: string ;
     };
+}
+
+interface UserProfile {
+    id: number;
+    username: string;
+    avatar: string;
+    phone: string;
 }
 
 const ChatMenu = () => {
@@ -29,6 +37,7 @@ const ChatMenu = () => {
     const [error, setError] = useState<string | null>(null);
     const dispatch = useDispatch();
     const chats = useSelector((state: any) => state.chats);
+    const userProfile = useSelector((state: any) => state.user.profile);
     const navigate = useNavigate()
 
     const handleAddChatClick = () => {
@@ -45,12 +54,14 @@ const ChatMenu = () => {
 
     const handleLogout = () => {
         sessionStorage.getItem("token")
+        socket.disconnect()
         navigate('/')
     }
 
     useEffect(() => {
         const userId = getUserIdFromToken();
         if (userId) {
+            socket.connect();
             socket.emit('set-user-id', userId);
         }
       }, []);
@@ -60,15 +71,13 @@ const ChatMenu = () => {
         const handleNewChat = (chat: any) => {
             dispatch(addChat(chat));
         }
-        
-
         socket.on('new-chat', handleNewChat);
         
         return () => {
             socket.off('new-chat', handleNewChat); 
         };
     });
-    
+
 
     useEffect(() => {
         const fetchChats = async () => {
@@ -98,7 +107,30 @@ const ChatMenu = () => {
         fetchChats();
     }, [dispatch]);
 
-
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            const userId = getUserIdFromToken();
+            if (!userId) return;
+    
+            try {
+                const response = await fetch(`http://localhost:3001/users/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+                    }
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    dispatch(setUserProfile(data) as any);
+                }
+            } catch (error) {
+                console.error('Failed to fetch user profile:', error);
+            }
+        };
+    
+        fetchUserProfile();
+    }, [dispatch]);
 
     return (
         <div className="chats-box">
@@ -117,7 +149,7 @@ const ChatMenu = () => {
                                 <div key={chat.id} className="chat-menu">
                                     <div className="chat-menu-avatar">
                                         <img 
-                                            src={otherUser?.avatar || "/assets/avatar.avif"} 
+                                            src={otherUser.avatar} 
                                             alt="chat-menu-avatar" 
                                         />
                                     </div>
@@ -142,10 +174,9 @@ const ChatMenu = () => {
             {currentView === 'profile' && (
                 <div className="user-info">
                     <img src="/assets/arrow_back_24dp_000000_FILL0_wght400_GRAD0_opsz24.png" alt="back" onClick={handleBackClick} />
-                    <img src="/assets/avatar.avif" alt="user-avatar" />
-                    <h2>User Name</h2>
-                    <p>+380 XX XXX XX XX</p>
-                    <p>username@email.com</p>
+                    <img src={userProfile.avatar} alt="user-avatar" />
+                    <h2>{userProfile.username || 'Loading...'}</h2>
+                    <p>{userProfile.phone || 'Loading...'}</p>
                     <button className="logout-button" onClick={handleLogout}>
                         Logout
                     </button>

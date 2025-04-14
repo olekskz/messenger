@@ -116,9 +116,16 @@ router.post('/add-chat', authenticateToken as any, async (req: Request, res: Res
 
         
         const recipientSocketId = onlineUsers.get(userTwoId);
+        const senderSocketId = onlineUsers.get(userOneId)
         if (recipientSocketId) {
             io.to(recipientSocketId).emit('new-chat', chatWithUsers);
         }
+        if (senderSocketId) {
+            io.to(senderSocketId).emit('new-chat', chatWithUsers);
+        }
+        
+        console.log('📨 Sending socket event to', userOneId);
+
 
         return res.status(201).json(chatWithUsers);
     } catch (error) {

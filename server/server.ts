@@ -1,16 +1,14 @@
 import express from "express";
-import { type Request, type Response } from "express";
 import { createServer } from "node:http";
 import passport from "passport";
 import { Strategy as JwtStrategy, ExtractJwt, VerifyCallback } from "passport-jwt";
 import bodyParser from "body-parser";
 import { Server } from "socket.io";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cors from "cors";
-import authRoutes from './controllers/userController';
-import { authenticateToken } from "./middleware/authController";
+import authRoutes from './controllers/authController';
 import chatRoutes from './controllers/chatController';
+import userRoutes from './controllers/userController';
 import { setupAssociations } from "./models/associations";
 dotenv.config();
 
@@ -56,12 +54,14 @@ export const io = new Server(server,{
 
 export const onlineUsers = new Map<number, string>()
 
+
 io.on('connection', (socket) => {
     console.log('✅ New socket connected:', socket.id);
 
     socket.on('set-user-id', (userId: number) => {
         console.log('👤 Registered user:', userId, 'socket:', socket.id);
         onlineUsers.set(userId, socket.id);
+        console.log('Updated onlineUsers:', onlineUsers);
     });
 
     socket.on('disconnect', () => {
@@ -72,12 +72,15 @@ io.on('connection', (socket) => {
                 break;
             }
         }
+        console.log('Updated onlineUsers:', onlineUsers);
     });
 });
 
 
+
 app.use('/auth', authRoutes)
 app.use('/chats', chatRoutes)
+app.use('/users', userRoutes)
 
 
 setupAssociations()

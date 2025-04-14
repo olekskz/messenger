@@ -64,6 +64,7 @@ const RegisterPage = () => {
         }
     }
 
+
     return (
         <div className="register-container">
             <div className="register-form">
