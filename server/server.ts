@@ -10,7 +10,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from './controllers/userController';
 import { authenticateToken } from "./middleware/authController";
-
+import chatRoutes from './controllers/chatController';
+import { setupAssociations } from "./models/associations";
 dotenv.config();
 
 const PORT = process.env.PORT || 3001;
@@ -19,7 +20,10 @@ const server = createServer(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
 
 
 interface JwtPayload {
@@ -42,7 +46,7 @@ const verifyCallback: VerifyCallback = (jwtPayload: JwtPayload, done) => {
 
 passport.use(new JwtStrategy(jwtOptions, verifyCallback));
 
-const io = new Server(server,{
+export const io = new Server(server,{
     cors: {
         origin: "http://localhost:3000", 
         methods: ["GET", "POST"],
@@ -50,15 +54,33 @@ const io = new Server(server,{
   }
 });
 
-app.use('/auth', authRoutes)
-app.get('/main', authenticateToken as any, (req: Request, res: Response) => {
-    if (!authenticateToken) {
-        res.redirect('/')
-    } else {
-        res.status(201).json({message: 'There is an access'})
-    }
-} )
+export const onlineUsers = new Map<number, string>()
 
+io.on('connection', (socket) => {
+    console.log('✅ New socket connected:', socket.id);
+
+    socket.on('set-user-id', (userId: number) => {
+        console.log('👤 Registered user:', userId, 'socket:', socket.id);
+        onlineUsers.set(userId, socket.id);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('❌ Socket disconnected:', socket.id);
+        for (const [userId, sockId] of onlineUsers.entries()) {
+            if (sockId === socket.id) {
+                onlineUsers.delete(userId);
+                break;
+            }
+        }
+    });
+});
+
+
+app.use('/auth', authRoutes)
+app.use('/chats', chatRoutes)
+
+
+setupAssociations()
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

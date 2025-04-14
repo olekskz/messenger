@@ -1,41 +1,21 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from './index';
+import { sequelize } from './index';
 
 interface ChatAttributes {
     id: number;
-    senderId: number;
-    receiverId: number;
-    lastMessage: string;
-    lastMessageAt: Date;
-    createdAt: Date;
-    updatedAt: Date;
+    user_one: number;
+    user_two: number;
 }
 
-interface ChatCreationAttributes extends Omit<ChatAttributes, 'id' | 'lastMessage' | 'lastMessageAt' | 'createdAt' | 'updatedAt'> {}
+interface ChatCreationAttributes extends Omit<ChatAttributes, 'id' | 'created_at' | 'updated_at'> {}
 
 export class Chat extends Model<ChatAttributes, ChatCreationAttributes> {
     declare id: number;
-    declare senderId: number;
-    declare receiverId: number;
-    declare lastMessage: string;
-    declare lastMessageAt: Date;
-    declare createdAt: Date;
-    declare updatedAt: Date;
+    declare user_one: number;
+    declare user_two: number;
+    declare created_at: Date;
+    declare updated_at: Date;
 
-    static associate(models: any) {
-        Chat.belongsTo(models.User, {
-            foreignKey: 'senderId',
-            as: 'sender'
-        });
-        Chat.belongsTo(models.User, {
-            foreignKey: 'receiverId',
-            as: 'receiver'
-        });
-        Chat.hasMany(models.Message, {
-            foreignKey: 'chatId',
-            as: 'messages'
-        });
-    }
 }
 
 Chat.init(
@@ -45,7 +25,7 @@ Chat.init(
             autoIncrement: true,
             primaryKey: true,
         },
-        senderId: {
+        user_one: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -53,37 +33,21 @@ Chat.init(
                 key: 'id'
             }
         },
-        receiverId: {
+        user_two: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
                 model: 'users',
                 key: 'id'
             }
-        },
-        lastMessage: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        lastMessageAt: {
-            type: DataTypes.DATE,
-            allowNull: true
-        },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-        updatedAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
         }
     },
     {
         sequelize,
         modelName: 'Chat',
         tableName: 'chats',
+        timestamps: true,
+        underscored: true  
     }
 );
 

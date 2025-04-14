@@ -1,16 +1,16 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from './index';
+import { sequelize } from './index';
 
 interface MessageAttributes {
     id: number;
     chatId: number;
     senderId: number;
     content: string;
-    createdAt: Date;
-    updatedAt: Date;
+    created_at: Date;
+    updated_at: Date;
 }
 
-interface MessageCreationAttributes extends Omit<MessageAttributes, 'id' | 'isRead' | 'createdAt' | 'updatedAt'> {}
+interface MessageCreationAttributes extends Omit<MessageAttributes, 'id' | 'isRead' | 'created_at' | 'updated_at'> {}
 
 export class Message extends Model<MessageAttributes, MessageCreationAttributes> {
     declare id: number;
@@ -19,17 +19,6 @@ export class Message extends Model<MessageAttributes, MessageCreationAttributes>
     declare content: string;
     declare createdAt: Date;
     declare updatedAt: Date;
-
-    static associate(models: any) {
-        Message.belongsTo(models.Chat, {
-            foreignKey: 'chatId',
-            as: 'chat'
-        });
-        Message.belongsTo(models.User, {
-            foreignKey: 'senderId',
-            as: 'sender'
-        });
-    }
 }
 
 Message.init(
@@ -59,12 +48,12 @@ Message.init(
             type: DataTypes.TEXT,
             allowNull: false,
         },
-        createdAt: {
+        created_at: {
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
-        updatedAt: {
+        updated_at: {
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: DataTypes.NOW,
@@ -74,6 +63,7 @@ Message.init(
         sequelize,
         modelName: 'Message',
         tableName: 'messages',
+        timestamps: true
     }
 );
 

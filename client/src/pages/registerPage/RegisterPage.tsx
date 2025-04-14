@@ -2,6 +2,8 @@ import React, {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./RegisterPage.css";
+import getUserIdFromToken from "../../utils/getUserIdFromToken";
+import socket from "../../socket";
 
 type InputState = {
     username: string;
@@ -38,6 +40,7 @@ const RegisterPage = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        const userId = getUserIdFromToken()
         try {
 
             const response = await fetch('http://localhost:3001/auth/register', {
@@ -52,7 +55,8 @@ const RegisterPage = () => {
 
             if (response.ok) {
                 sessionStorage.setItem('token', data.token)
-                navigate('/main')
+                socket.emit("user-connected", userId);
+                navigate('/avatar-paste')
             }
 
         } catch (error) {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./profileHeader.css";
-import { useView } from "../../chatMenuContext";
+import { useView } from "../../hooks/chatMenuContext";
 
 const ProfileHeader = () => {
     const { setCurrentView } = useView();

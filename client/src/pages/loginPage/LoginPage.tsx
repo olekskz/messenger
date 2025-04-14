@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./loginPage.css";
+import socket from "../../socket";
+import getUserIdFromToken from "../../utils/getUserIdFromToken";
 
 type InputTypes = {
     username: string;
@@ -25,6 +27,7 @@ const LoginPage = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        const userId = getUserIdFromToken()
 
         try {
             const response = await fetch('http://localhost:3001/auth/login', {
@@ -36,6 +39,7 @@ const LoginPage = () => {
             });
 
             const data = await response.json()
+            socket.emit("user-connected", userId);
 
             if (response.ok) {
                 sessionStorage.setItem('token', data.token)

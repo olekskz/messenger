@@ -1,11 +1,12 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from './index';
+import { sequelize } from './index';
 
 interface UserAttributes {
     id: number;
     username: string;
     password: string;
     phone: string;
+    avatar: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -19,13 +20,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> {
     declare phone: string;
     declare createdAt: Date;
     declare updatedAt: Date;
-
-    static associate(models: any) {
-        User.hasMany(models.Chat, {
-            foreignKey: 'userId',
-            as: 'chats',
-        });
-    }
+    declare avatar: string;
 }
 
 User.init(
@@ -49,6 +44,10 @@ User.init(
             allowNull: false,
             unique: true,
         },
+        avatar: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
@@ -64,6 +63,7 @@ User.init(
         sequelize,
         modelName: 'User',
         tableName: 'users',
+        timestamps: true
     }
 );
 

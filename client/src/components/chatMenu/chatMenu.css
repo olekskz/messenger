@@ -142,3 +142,33 @@
 .add-chat img:hover {
     opacity: 0.7;
 }
+
+.logout-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #020202;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+    background-color: #4e4e4e;
+}
+
+.back-button {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import ProfileHeader from "../components/profileHeader/profileHeader";
 import ChatMenu from "../components/chatMenu/chatMenu";
-import { ViewProvider } from "../chatMenuContext";
+import { ViewProvider } from "../hooks/chatMenuContext";
 import Chat from "../components/chat/chat";
 
 

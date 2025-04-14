@@ -11,4 +11,4 @@ const sequelize = new Sequelize({
     database: process.env.DB_NAME || 'messenger',
 });
 
-export default sequelize;
+export { sequelize };
