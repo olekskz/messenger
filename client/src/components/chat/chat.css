@@ -264,3 +264,7 @@
     color: #666;
     text-align: center;
 }
+
+.chat-container.hidden {
+    display: none;
+}

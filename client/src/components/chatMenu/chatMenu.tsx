@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import getUserIdFromToken from '../../utils/getUserIdFromToken';
 import socket from "../../socket";
 import { useSelector, useDispatch } from 'react-redux';
-import { setChats, addChat } from '../../features/chatSlice';
+import { setChats, addChat, setSelectedChat } from '../../features/chatSlice';
 import {setUserProfile} from "../../features/userSlice";
 
 interface Chat {
@@ -53,9 +53,13 @@ const ChatMenu = () => {
     };
 
     const handleLogout = () => {
-        sessionStorage.getItem("token")
+        sessionStorage.removeItem("token")
         socket.disconnect()
         navigate('/')
+    }
+
+    const selectChat = (chat: any) => {
+        dispatch(setSelectedChat(chat))
     }
 
     useEffect(() => {
@@ -147,9 +151,9 @@ const ChatMenu = () => {
                                 : chat.userOne;
                             return (
                                 <div key={chat.id} className="chat-menu">
-                                    <div className="chat-menu-avatar">
+                                    <div className="chat-menu-avatar" onClick={() => {selectChat(chat)}}>
                                         <img 
-                                            src={otherUser.avatar} 
+                                            src={otherUser?.avatar} 
                                             alt="chat-menu-avatar" 
                                         />
                                     </div>

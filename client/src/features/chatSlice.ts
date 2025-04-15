@@ -18,12 +18,14 @@ interface ChatState {
     chats: Chat[];
     loading: boolean;
     error: string | null;
+    selectedChat: Chat | null;
 }
 
 const initialState: ChatState = {
     chats: [],
     loading: false,
-    error: null
+    error: null,
+    selectedChat: null
 };
 
 const chatSlice = createSlice({
@@ -32,6 +34,21 @@ const chatSlice = createSlice({
     reducers: {
         setChats: (state, action: PayloadAction<Chat[]>) => {
             state.chats = action.payload;
+            state.loading = false;
+            state.error = null;
+        },
+        setSelectedChat: (state, action: PayloadAction<Chat>) => {
+            state.selectedChat = action.payload;
+
+            const exists = state.chats.some(chat => chat.id === action.payload.id);
+            if (exists) {
+                state.chats = state.chats.map(chat =>
+                    chat.id === action.payload.id ? action.payload : chat
+                );
+            } else {
+                state.chats.push(action.payload);
+            }
+
             state.loading = false;
             state.error = null;
         },
@@ -50,5 +67,5 @@ const chatSlice = createSlice({
     }
 });
 
-export const { setChats, addChat, setLoading, setError } = chatSlice.actions;
+export const { setChats, addChat, setLoading, setError, setSelectedChat } = chatSlice.actions;
 export default chatSlice.reducer;

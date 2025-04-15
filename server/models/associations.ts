@@ -13,6 +13,15 @@ export const setupAssociations = () => {
         foreignKey: 'user_two',
         as: 'chatsAsUserTwo'
     });
+    Chat.hasMany(Message, {
+        foreignKey: 'chat_id',
+        as: 'messages',
+    });
+    
+    User.hasMany(Message, {
+        foreignKey: 'sender_id',
+        as: 'messagesSent',
+    });
 
     
     Chat.belongsTo(User, {
@@ -26,11 +35,11 @@ export const setupAssociations = () => {
 
     
     Message.belongsTo(Chat, {
-        foreignKey: 'chatId',
+        foreignKey: 'chat_id',
         as: 'chat'
     });
     Message.belongsTo(User, {
-        foreignKey: 'senderId',
+        foreignKey: 'sender_id',
         as: 'sender'
     });
 };

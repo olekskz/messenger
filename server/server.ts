@@ -9,7 +9,12 @@ import cors from "cors";
 import authRoutes from './controllers/authController';
 import chatRoutes from './controllers/chatController';
 import userRoutes from './controllers/userController';
+import messageRoutes from './controllers/messageContoller';
 import { setupAssociations } from "./models/associations";
+import User from "./models/user";
+import Chat from "./models/chat";
+import Message from "./models/message";
+
 dotenv.config();
 
 const PORT = process.env.PORT || 3001;
@@ -27,6 +32,12 @@ app.use(cors({
 interface JwtPayload {
     id: number;
     username: string;
+}
+
+interface SocketSendMessagePayload {
+    content: string;
+    sender_id: number;
+    chat_id: number;
 }
 
 const jwtOptions = {
@@ -64,6 +75,43 @@ io.on('connection', (socket) => {
         console.log('Updated onlineUsers:', onlineUsers);
     });
 
+    socket.on("send-message", async (message: SocketSendMessagePayload) => {
+        try {
+            const newMessage = await Message.create({
+                content: message.content,
+                sender_id: message.sender_id,
+                chat_id: message.chat_id
+            });
+
+            const chat = await Chat.findOne({
+                where: { id: message.chat_id },
+                include: [
+                    { model: User, as: "userOne", attributes: ["id"] },
+                    { model: User, as: "userTwo", attributes: ["id"] }
+                ]
+            });
+
+            if (!chat) return;
+
+            const recipientId =
+                chat.user_one === message.sender_id
+                    ? chat.user_two
+                    : chat.user_one;
+
+            const recipientSocketId = onlineUsers.get(recipientId);
+
+            if (recipientSocketId) {
+                io.to(recipientSocketId).emit("new-message", newMessage);
+                console.log(`📨 Sent message to user ${recipientId}`);
+            }
+
+            io.emit("new-message", newMessage);
+
+        } catch (err) {
+            console.error("Error sending message:", err);
+        }
+    });
+
     socket.on('disconnect', () => {
         console.log('❌ Socket disconnected:', socket.id);
         for (const [userId, sockId] of onlineUsers.entries()) {
@@ -81,9 +129,10 @@ io.on('connection', (socket) => {
 app.use('/auth', authRoutes)
 app.use('/chats', chatRoutes)
 app.use('/users', userRoutes)
-
+app.use('/messages', messageRoutes);
 
 setupAssociations()
+
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

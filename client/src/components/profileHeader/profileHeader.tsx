@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import "./profileHeader.css";
 import { useView } from "../../hooks/chatMenuContext";
+import { useSelector } from "react-redux";
+
 
 const ProfileHeader = () => {
     const { setCurrentView } = useView();
     const [search, setSearch] = useState<string>("");
     const [showSearch, setShowSearch] = useState<boolean>(false);
     const [showProfile, setShowProfile] = useState<boolean>(false);
+    const userProfile = useSelector((state: any) => state.user.profile);
     
     const handleProfileClick = () => {
         setShowProfile(!showProfile);
@@ -32,7 +35,7 @@ const ProfileHeader = () => {
         <div className="profile-box">
             {!showSearch ? (
                 <>
-                    <img src="/assets/avatar.avif" alt="profile-avatar" onClick={handleProfileClick} /> 
+                    <img src={userProfile?.avatar || "/assets/default-avatar.png"} alt="profile-avatar" onClick={handleProfileClick} /> 
                     <img 
                         src="/assets/search_24dp_000000_FILL0_wght400_GRAD0_opsz24.png" 
                         alt="search-chat" 

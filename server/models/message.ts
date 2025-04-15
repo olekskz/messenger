@@ -3,19 +3,19 @@ import { sequelize } from './index';
 
 interface MessageAttributes {
     id: number;
-    chatId: number;
-    senderId: number;
+    chat_id: number;
+    sender_id: number;
     content: string;
     created_at: Date;
     updated_at: Date;
 }
 
-interface MessageCreationAttributes extends Omit<MessageAttributes, 'id' | 'isRead' | 'created_at' | 'updated_at'> {}
+interface MessageCreationAttributes extends Omit<MessageAttributes, 'id' | 'created_at' | 'updated_at'> {}
 
 export class Message extends Model<MessageAttributes, MessageCreationAttributes> {
     declare id: number;
-    declare chatId: number;
-    declare senderId: number;
+    declare chat_id: number;
+    declare sender_id: number;
     declare content: string;
     declare createdAt: Date;
     declare updatedAt: Date;
@@ -28,7 +28,7 @@ Message.init(
             autoIncrement: true,
             primaryKey: true,
         },
-        chatId: {
+        chat_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -36,7 +36,7 @@ Message.init(
                 key: 'id'
             }
         },
-        senderId: {
+        sender_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -63,7 +63,9 @@ Message.init(
         sequelize,
         modelName: 'Message',
         tableName: 'messages',
-        timestamps: true
+        timestamps: true,
+        createdAt: "created_at",
+        updatedAt: "updated_at",
     }
 );
 

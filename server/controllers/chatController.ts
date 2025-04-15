@@ -104,12 +104,12 @@ router.post('/add-chat', authenticateToken as any, async (req: Request, res: Res
                 {
                     model: User,
                     as: 'userOne',
-                    attributes: ['id', 'username', 'avatar']
+                    attributes: ['id', 'username', 'phone', 'avatar']
                 },
                 {
                     model: User,
                     as: 'userTwo',
-                    attributes: ['id', 'username', 'avatar']
+                    attributes: ['id', 'username', 'phone', 'avatar']
                 }
             ]
         });
